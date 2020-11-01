@@ -11,7 +11,7 @@
     "create:table": "npx sls dynamodb migrate --stage local",
     "delete:table": "bash scripts/90.delete-local-all-table.sh",
     "deploy:dev": "npx sls deploy --stage=dev",
-    "remove:dev": "aws s3 rb s3://buzz-dev-data-bucket && npx sls remove --stage=dev"
+    "remove:dev": "aws s3 rb s3://bow-dev-image && npx sls remove --stage=dev"
   },
   "devDependencies": {
     "dynamodb-admin": "^4.0.0",
