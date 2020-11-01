@@ -1,0 +1,14 @@
+{
+  "name": "bow",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Jozuo <jozuo.dev@gmail.com>",
+  "license": "UNLICENSED",
+  "private": true,
+  "devDependencies": {
+    "serverless-deployment-bucket": "^1.2.0",
+    "serverless-iam-roles-per-function": "^2.0.2",
+    "serverless-prune-plugin": "^1.4.3",
+    "serverless-python-requirements": "^5.1.0"
+  }
+}

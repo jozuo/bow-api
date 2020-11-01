@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "bow"
+version = "1.0.0"
+description = ""
+authors = ["Toru Mori <jozuo.dev@gmail.com>"]
+license = "UNLICENSED"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+boto3 = "^1.16.9"
+autopep8 = "^1.5.4"
+flake8 = "^3.8.4"
+isort = "^5.6.4"
+mypy = "^0.790"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

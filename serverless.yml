@@ -1,0 +1,57 @@
+---
+service: bow
+frameworkVersion: '2'
+
+plugins:
+  - serverless-deployment-bucket
+  - serverless-prune-plugin
+  - serverless-iam-roles-per-function
+  - serverless-python-requirements
+
+provider:
+  name: aws
+  runtime: python3.8
+  stage: ${opt:stage, 'dev'}
+  region: ${ opt:region, 'ap-northeast-1' }
+  deploymentBucket:
+    name: ${self:service}-${self:provider.stage}-sls-deploy
+    serverSideEncryption: AES256
+  logRetentionInDays: 30
+
+package:
+  exclude:
+    - .gitignore
+    - .git/**
+    - README.md
+    - package.json
+    - yarn.lock
+    - node_modules/**
+    - pyproject.toml
+    - poetry.lock
+    - serverless.yml
+
+functions:
+  api:
+    handler: app.api.main.handler
+    name: ${self:service}-${self:provider.stage}-api
+    events:
+      - http:
+          path: /{path+}
+          method: any
+          private: false
+          cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - s3:GetObject
+          - s3:PutObject
+        Resource:
+          - !Sub "${DataBucket.Arn}/*"
+      - Effect: Allow
+
+Resources:
+  DataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: ${self:service}-${self:provider.stage}-image
+
