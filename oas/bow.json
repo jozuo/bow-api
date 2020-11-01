@@ -8,7 +8,9 @@
   "paths": {
     "/owners/": {
       "post": {
-        "tags": ["owner"],
+        "tags": [
+          "owner"
+        ],
         "summary": "Post",
         "operationId": "post_owners__post",
         "requestBody": {
@@ -57,7 +59,9 @@
     },
     "/owners/search": {
       "get": {
-        "tags": ["owner"],
+        "tags": [
+          "owner"
+        ],
         "summary": "Search",
         "operationId": "search_owners_search_get",
         "parameters": [
@@ -79,6 +83,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/OwnerResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
                 }
               }
             }
@@ -114,7 +128,9 @@
       },
       "Message": {
         "title": "Message",
-        "required": ["detail"],
+        "required": [
+          "detail"
+        ],
         "type": "object",
         "properties": {
           "detail": {
@@ -125,7 +141,9 @@
       },
       "OwnerRequest": {
         "title": "OwnerRequest",
-        "required": ["email"],
+        "required": [
+          "email"
+        ],
         "type": "object",
         "properties": {
           "email": {
@@ -137,7 +155,10 @@
       },
       "OwnerResponse": {
         "title": "OwnerResponse",
-        "required": ["id", "email"],
+        "required": [
+          "id",
+          "email"
+        ],
         "type": "object",
         "properties": {
           "id": {
@@ -153,7 +174,11 @@
       },
       "ValidationError": {
         "title": "ValidationError",
-        "required": ["loc", "msg", "type"],
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
         "type": "object",
         "properties": {
           "loc": {

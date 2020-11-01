@@ -11,7 +11,8 @@
     "create:table": "npx sls dynamodb migrate --stage local",
     "delete:table": "bash scripts/90.delete-local-all-table.sh",
     "deploy:dev": "npx sls deploy --stage=dev",
-    "remove:dev": "aws s3 rb s3://bow-dev-image && npx sls remove --stage=dev"
+    "remove:dev": "aws s3 rb s3://bow-dev-image && npx sls remove --stage=dev",
+    "oas": "curl http://localhost:5000/openapi.json | jq > oas/bow.json"
   },
   "devDependencies": {
     "dynamodb-admin": "^4.0.0",
