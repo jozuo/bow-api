@@ -43,7 +43,11 @@ def post(request: OwnerRequest) -> OwnerResponse:
     return OwnerResponse.from_model(model)
 
 
-@router.get("/search", response_model=OwnerResponse)
+@router.get(
+    "/search",
+    response_model=OwnerResponse,
+    responses={status.HTTP_404_NOT_FOUND: {"model": Message}},
+)
 def search(email: EmailStr) -> OwnerResponse:
     for model in OwnerModel.scan(OwnerModel.email == email, limit=1):
         return OwnerResponse.from_model(model)
