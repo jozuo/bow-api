@@ -5,18 +5,8 @@ frameworkVersion: '2'
 plugins:
   - serverless-deployment-bucket
   - serverless-prune-plugin
-  - serverless-iam-roles-per-function
   - serverless-python-requirements
-
-provider:
-  name: aws
-  runtime: python3.8
-  stage: ${opt:stage, 'dev'}
-  region: ${ opt:region, 'ap-northeast-1' }
-  deploymentBucket:
-    name: ${self:service}-${self:provider.stage}-sls-deploy
-    serverSideEncryption: AES256
-  logRetentionInDays: 30
+  - serverless-dynamodb-local
 
 package:
   exclude:
@@ -29,29 +19,69 @@ package:
     - pyproject.toml
     - poetry.lock
     - serverless.yml
+    - .dynamodb/**
+    - .dynamodb-data/**
+
+provider:
+  name: aws
+  runtime: python3.8
+  stage: ${opt:stage, 'local'}
+  region: ${ opt:region, 'ap-northeast-1' }
+  deploymentBucket:
+    name: ${self:service}-${self:provider.stage}-sls-deploy
+    serverSideEncryption: AES256
+  logRetentionInDays: 30
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:GetObject
+        - s3:PutObject
+      Resource:
+        - !Sub "${ImageBucket.Arn}/*"
+
+custom:
+  prune:
+    automatic: true
+    number: 3
+  pythonRequirements:
+    dockerizePip: false
+    usePoetry: true
+  dynamodb:
+    stages:
+      - local
+    start:
+      dbPath: ./.dynamodb-data/
+      migrate: false
+      seed: false
 
 functions:
   api:
     handler: app.api.main.handler
     name: ${self:service}-${self:provider.stage}-api
+    environment:
+      TABLE_PREFIX: ${self:service}-${self:provider.stage}
     events:
       - http:
           path: /{path+}
           method: any
           private: false
           cors: true
-    iamRoleStatements:
-      - Effect: Allow
-        Action:
-          - s3:GetObject
-          - s3:PutObject
-        Resource:
-          - !Sub "${DataBucket.Arn}/*"
-      - Effect: Allow
 
-Resources:
-  DataBucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: ${self:service}-${self:provider.stage}-image
+resources:
+  Resources:
+    ImageBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:service}-${self:provider.stage}-image
+    OwnerTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: ${self:service}-${self:provider.stage}-owner
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
 

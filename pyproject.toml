@@ -7,13 +7,20 @@ license = "UNLICENSED"
 
 [tool.poetry.dependencies]
 python = "^3.8"
+mangum = "^0.10.0"
+fastapi = "^0.61.1"
+pynamodb = "^4.3.3"
+autopep8 = "^1.5.4"
+email-validator = "^1.1.1"
 
 [tool.poetry.dev-dependencies]
 boto3 = "^1.16.9"
-autopep8 = "^1.5.4"
 flake8 = "^3.8.4"
 isort = "^5.6.4"
 mypy = "^0.790"
+black = "^20.8b1"
+uvicorn = "^0.12.2"
+coloredlogs = "^14.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
