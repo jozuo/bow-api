@@ -15,6 +15,14 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+.venv/
 
 # Serverless directories
 .serverless
+node_modules/
+
+
+# original
+.dynamodb/
+.dynamodb-data/
+__pycache__/
