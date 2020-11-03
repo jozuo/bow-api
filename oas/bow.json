@@ -11,7 +11,8 @@
         "tags": [
           "owner"
         ],
-        "summary": "Post",
+        "summary": "オーナー情報の登録",
+        "description": "オーナー情報を登録します",
         "operationId": "post_owners__post",
         "requestBody": {
           "content": {
@@ -62,14 +63,17 @@
         "tags": [
           "owner"
         ],
-        "summary": "Search",
+        "summary": "オーナー情報の検索",
+        "description": "メールアドレスでオーナー情報を検索します",
         "operationId": "search_owners_search_get",
         "parameters": [
           {
+            "description": "メールアドレス",
             "required": true,
             "schema": {
               "title": "Email",
               "type": "string",
+              "description": "メールアドレス",
               "format": "email"
             },
             "name": "email",
@@ -109,10 +113,403 @@
           }
         }
       }
+    },
+    "/owners/{owner_id}/dogs/": {
+      "get": {
+        "tags": [
+          "dogs"
+        ],
+        "summary": "犬情報の一覧取得",
+        "description": "オーナーに紐付く犬情報の一覧を取得します",
+        "operationId": "list_owners__owner_id__dogs__get",
+        "parameters": [
+          {
+            "description": "オーナーID",
+            "required": true,
+            "schema": {
+              "title": "Owner Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "オーナーID"
+            },
+            "name": "owner_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response List Owners  Owner Id  Dogs  Get",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DogResponse"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "dogs"
+        ],
+        "summary": "犬情報の登録",
+        "description": "犬情報を登録します",
+        "operationId": "post_owners__owner_id__dogs__post",
+        "parameters": [
+          {
+            "description": "オーナーID",
+            "required": true,
+            "schema": {
+              "title": "Owner Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "オーナーID"
+            },
+            "name": "owner_id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DogRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DogResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/owners/{owner_id}/dogs/{id}": {
+      "get": {
+        "tags": [
+          "dogs"
+        ],
+        "summary": "犬情報の1件取得",
+        "description": "犬情報を1件取得します",
+        "operationId": "get_owners__owner_id__dogs__id__get",
+        "parameters": [
+          {
+            "description": "オーナーID",
+            "required": true,
+            "schema": {
+              "title": "Owner Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "オーナーID"
+            },
+            "name": "owner_id",
+            "in": "path"
+          },
+          {
+            "description": "犬ID",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "犬ID"
+            },
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DogResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "dogs"
+        ],
+        "summary": "犬情報の更新",
+        "description": "犬情報を更新します",
+        "operationId": "put_owners__owner_id__dogs__id__put",
+        "parameters": [
+          {
+            "description": "オーナーID",
+            "required": true,
+            "schema": {
+              "title": "Owner Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "オーナーID"
+            },
+            "name": "owner_id",
+            "in": "path"
+          },
+          {
+            "description": "犬ID",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "犬ID"
+            },
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DogRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DogResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "dogs"
+        ],
+        "summary": "犬情報の削除",
+        "description": "犬情報を削除します",
+        "operationId": "delete_owners__owner_id__dogs__id__delete",
+        "parameters": [
+          {
+            "description": "オーナーID",
+            "required": true,
+            "schema": {
+              "title": "Owner Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "オーナーID"
+            },
+            "name": "owner_id",
+            "in": "path"
+          },
+          {
+            "description": "犬ID",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "犬ID"
+            },
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmptyResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "DogRequest": {
+        "title": "DogRequest",
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "名前",
+            "type": "string"
+          },
+          "birth": {
+            "title": "誕生日(unixtime)",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "gender": {
+            "title": "性別",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "color": {
+            "title": "毛の色",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "image_id": {
+            "title": "画像ID、事前にImageリソースで登録した際に発番されたID",
+            "type": "string"
+          },
+          "order": {
+            "title": "画面表示順",
+            "minimum": 1,
+            "type": "integer"
+          }
+        }
+      },
+      "DogResponse": {
+        "title": "DogResponse",
+        "required": [
+          "name",
+          "id",
+          "updated_at"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "名前",
+            "type": "string"
+          },
+          "birth": {
+            "title": "誕生日(unixtime)",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "gender": {
+            "title": "性別",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "color": {
+            "title": "毛の色",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "image_id": {
+            "title": "画像ID、事前にImageリソースで登録した際に発番されたID",
+            "type": "string"
+          },
+          "order": {
+            "title": "画面表示順",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "id": {
+            "title": "犬ID",
+            "type": "string"
+          },
+          "updated_at": {
+            "title": "更新日時(unixtime)",
+            "type": "integer"
+          }
+        }
+      },
+      "EmptyResponse": {
+        "title": "EmptyResponse",
+        "type": "object",
+        "properties": {}
+      },
       "HTTPValidationError": {
         "title": "HTTPValidationError",
         "type": "object",
@@ -147,7 +544,7 @@
         "type": "object",
         "properties": {
           "email": {
-            "title": "Email",
+            "title": "メールアドレス",
             "type": "string",
             "format": "email"
           }
@@ -156,19 +553,19 @@
       "OwnerResponse": {
         "title": "OwnerResponse",
         "required": [
-          "id",
-          "email"
+          "email",
+          "id"
         ],
         "type": "object",
         "properties": {
-          "id": {
-            "title": "Id",
-            "type": "string"
-          },
           "email": {
-            "title": "Email",
+            "title": "メールアドレス",
             "type": "string",
             "format": "email"
+          },
+          "id": {
+            "title": "オーナーID",
+            "type": "string"
           }
         }
       },

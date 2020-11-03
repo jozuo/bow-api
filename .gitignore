@@ -26,3 +26,4 @@ node_modules/
 .dynamodb/
 .dynamodb-data/
 __pycache__/
+test.py
