@@ -105,4 +105,20 @@ resources:
         KeySchema:
           - AttributeName: id
             KeyType: HASH
+    DogTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: ${self:service}-${self:provider.stage}-dog
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: owner_id
+            AttributeType: S
+          - AttributeName: dog_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: owner_id
+            KeyType: HASH
+          - AttributeName: dog_id
+            KeyType: RANGE
+
 

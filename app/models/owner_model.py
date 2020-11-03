@@ -1,14 +1,12 @@
 import os
 from datetime import datetime
 
-from pynamodb.attributes import NumberAttribute, UnicodeAttribute
+from pynamodb.attributes import UnicodeAttribute
 from pynamodb.models import Model
+from pynamodb_attributes import IntegerAttribute
 
 prefix = os.environ.get("TABLE_PREFIX")
 is_offline = os.environ.get("IS_OFFLINE")
-
-print(f"prefix: {prefix}")
-print(f"is_offline: {is_offline}")
 
 
 class OwnerModel(Model):
@@ -20,6 +18,6 @@ class OwnerModel(Model):
 
     id = UnicodeAttribute(hash_key=True, null=False)
     email = UnicodeAttribute(null=False)
-    created_at = NumberAttribute(
+    created_at = IntegerAttribute(
         null=False, default=int(datetime.timestamp(datetime.now()))
     )
