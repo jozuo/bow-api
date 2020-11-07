@@ -23,6 +23,7 @@ uvicorn = "^0.12.2"
 coloredlogs = "^14.0"
 pytest = "^6.1.2"
 requests = "^2.24.0"
+pytest-only = "^1.2.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

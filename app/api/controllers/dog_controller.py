@@ -22,16 +22,15 @@ class DogRequest(BaseModel):
     order: Optional[int] = Field(None, title="画面表示順", ge=1)
 
     def to_model(self, owner_id: str) -> DogModel:
-        # TODO ループ処理に置き換え
         model = DogModel()
         model.owner_id = owner_id
         model.dog_id = str(uuid.uuid4()).replace("-", "")
-        model.name = self.name
-        model.birth = self.birth
-        model.gender = self.gender
-        model.color = self.color
-        model.image_id = self.image_id
-        model.order = self.order
+
+        for (key, value) in vars(self).items():
+            if key not in model.get_attributes().keys() or not value:
+                continue
+            setattr(model, key, value)
+
         return model
 
 
@@ -41,23 +40,16 @@ class DogResponse(DogRequest):
 
     @classmethod
     def from_model(cls, model: DogModel) -> "DogResponse":
-        # TODO ループ処理に置き換え
         response = DogResponse(
             id=model.dog_id,
             name=model.name,
             updated_at=model.updated_at,
         )
 
-        if model.birth:
-            response.birth = model.birth
-        if model.gender:
-            response.gender = model.gender
-        if model.color:
-            response.color = model.color
-        if model.image_id:
-            response.image_id = model.image_id
-        if model.order:
-            response.order = model.order
+        for (key, value) in model.attribute_values.items():
+            if key not in vars(response).keys():
+                continue
+            setattr(response, key, value)
         return response
 
 
