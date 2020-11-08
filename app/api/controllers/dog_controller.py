@@ -18,7 +18,9 @@ class DogRequest(BaseModel):
     birth: Optional[int] = Field(None, title="誕生日(unixtime)", ge=0)
     gender: Optional[int] = Field(None, title="性別", ge=0)
     color: Optional[int] = Field(None, title="毛の色", ge=0)
-    image_id: Optional[str] = Field(None, title="画像ID、事前にImageリソースで登録した際に発番されたID")
+    image_path: Optional[str] = Field(
+        None, regex="^[a-z0-9/.]+$", title="画像パス、事前にImageリソースで登録した際に発行されたパス"
+    )
     order: Optional[int] = Field(None, title="画面表示順", ge=1)
 
     def to_model(self, owner_id: str) -> DogModel:

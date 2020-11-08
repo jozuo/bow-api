@@ -22,7 +22,7 @@ class DogModel(Model):
     birth = IntegerAttribute(null=True)
     gender = IntegerAttribute(null=True)
     color = IntegerAttribute(null=True)
-    image_id = UnicodeAttribute(null=True)
+    image_path = UnicodeAttribute(null=True)
     order = IntegerAttribute(null=True)
     updated_at = IntegerAttribute(
         null=False, default=int(datetime.timestamp(datetime.now()))

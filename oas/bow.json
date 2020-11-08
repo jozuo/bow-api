@@ -417,10 +417,206 @@
           }
         }
       }
+    },
+    "/owners/{owner_id}/images/": {
+      "get": {
+        "tags": [
+          "images"
+        ],
+        "summary": "画像データの取得",
+        "description": "画像データ(バイナリ)を取得します",
+        "operationId": "get_owners__owner_id__images__get",
+        "parameters": [
+          {
+            "description": "オーナーID",
+            "required": true,
+            "schema": {
+              "title": "Owner Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "オーナーID"
+            },
+            "name": "owner_id",
+            "in": "path"
+          },
+          {
+            "description": "画像パス",
+            "required": true,
+            "schema": {
+              "title": "Image Path",
+              "pattern": "^[a-z0-9/.]+$",
+              "type": "string",
+              "description": "画像パス"
+            },
+            "name": "image_path",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "画像データ(バイナリ)"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "images"
+        ],
+        "summary": "画像情報の登録",
+        "description": "画像情報を登録します",
+        "operationId": "post_owners__owner_id__images__post",
+        "parameters": [
+          {
+            "description": "オーナーID",
+            "required": true,
+            "schema": {
+              "title": "Owner Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "オーナーID"
+            },
+            "name": "owner_id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_post_owners__owner_id__images__post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "images"
+        ],
+        "summary": "画像データの削除",
+        "description": "画像データを削除します",
+        "operationId": "delete_owners__owner_id__images__delete",
+        "parameters": [
+          {
+            "description": "オーナーID",
+            "required": true,
+            "schema": {
+              "title": "Owner Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "オーナーID"
+            },
+            "name": "owner_id",
+            "in": "path"
+          },
+          {
+            "description": "画像パス",
+            "required": true,
+            "schema": {
+              "title": "Image Path",
+              "pattern": "^[a-z0-9/.]+$",
+              "type": "string",
+              "description": "画像パス"
+            },
+            "name": "image_path",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmptyResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "Body_post_owners__owner_id__images__post": {
+        "title": "Body_post_owners__owner_id__images__post",
+        "required": [
+          "file"
+        ],
+        "type": "object",
+        "properties": {
+          "file": {
+            "title": "File",
+            "type": "string",
+            "description": "画像ファイルデータ",
+            "format": "binary"
+          }
+        }
+      },
       "DogRequest": {
         "title": "DogRequest",
         "required": [
@@ -447,8 +643,9 @@
             "minimum": 0,
             "type": "integer"
           },
-          "image_id": {
-            "title": "画像ID、事前にImageリソースで登録した際に発番されたID",
+          "image_path": {
+            "title": "画像パス、事前にImageリソースで登録した際に発行されたパス",
+            "pattern": "^[a-z0-9/.]+$",
             "type": "string"
           },
           "order": {
@@ -486,8 +683,9 @@
             "minimum": 0,
             "type": "integer"
           },
-          "image_id": {
-            "title": "画像ID、事前にImageリソースで登録した際に発番されたID",
+          "image_path": {
+            "title": "画像パス、事前にImageリソースで登録した際に発行されたパス",
+            "pattern": "^[a-z0-9/.]+$",
             "type": "string"
           },
           "order": {
@@ -520,6 +718,19 @@
             "items": {
               "$ref": "#/components/schemas/ValidationError"
             }
+          }
+        }
+      },
+      "ImageResponse": {
+        "title": "ImageResponse",
+        "required": [
+          "image_path"
+        ],
+        "type": "object",
+        "properties": {
+          "image_path": {
+            "title": "画像パス",
+            "type": "string"
           }
         }
       },
