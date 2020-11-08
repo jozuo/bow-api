@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.controllers import dog_controller, owner_controller
+from app.api.controllers import dog_controller, image_controller, owner_controller
 
 router = APIRouter()
 router.include_router(
@@ -10,4 +10,7 @@ router.include_router(
 )
 router.include_router(
     dog_controller.router, prefix="/owners/{owner_id}/dogs", tags=["dogs"]
+)
+router.include_router(
+    image_controller.router, prefix="/owners/{owner_id}/images", tags=["images"]
 )

@@ -12,6 +12,7 @@ fastapi = "^0.61.1"
 pynamodb = "^4.3.3"
 email-validator = "^1.1.1"
 pynamodb-attributes = "^0.2.10"
+python-multipart = "^0.0.5"
 
 [tool.poetry.dev-dependencies]
 boto3 = "^1.16.9"

@@ -7,6 +7,7 @@ plugins:
   - serverless-prune-plugin
   - serverless-python-requirements
   - serverless-dynamodb-local
+  - serverless-apigw-binary
 
 package:
   exclude:
@@ -55,8 +56,14 @@ provider:
             - table/${self:service}-${self:provider.stage}-*
     - Effect: Allow
       Action:
+        - s3:ListBucket
+      Resource:
+        - !Sub "${ImageBucket.Arn}"
+    - Effect: Allow
+      Action:
         - s3:GetObject
         - s3:PutObject
+        - s3:DeleteObject
       Resource:
         - !Sub "${ImageBucket.Arn}/*"
 
@@ -67,6 +74,9 @@ custom:
   pythonRequirements:
     dockerizePip: false
     usePoetry: true
+  apigwBinary:
+    types:
+      - multipart/form-data
   dynamodb:
     stages:
       - local
@@ -81,6 +91,7 @@ functions:
     name: ${self:service}-${self:provider.stage}-api
     environment:
       TABLE_PREFIX: ${self:service}-${self:provider.stage}
+      IMAGE_BUCKET: ${self:service}-${self:provider.stage}-image
     events:
       - http:
           path: /{path+}
