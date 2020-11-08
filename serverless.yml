@@ -8,6 +8,7 @@ plugins:
   - serverless-python-requirements
   - serverless-dynamodb-local
   - serverless-apigw-binary
+  - serverless-domain-manager
 
 package:
   exclude:
@@ -35,6 +36,7 @@ provider:
     name: ${self:service}-${self:provider.stage}-sls-deploy
     serverSideEncryption: AES256
   logRetentionInDays: 30
+  endpointType: regional
   apiGateway:
     shouldStartNameWithService: true
   iamRoleStatements:
@@ -84,6 +86,17 @@ custom:
       dbPath: ./.dynamodb-data/
       migrate: false
       seed: false
+  domainName:
+    dev: bow-api-dev.jozuo.work
+    prod: bow-api.jozuo.work
+  customDomain:
+    domainName: ${self:custom.domainName.${self:provider.stage}}
+    basePath: ""
+    certificateName: "*.jozuo.work"
+    certificateArn: arn:aws:acm:ap-northeast-1:602526353155:certificate/f59fa794-8ee6-4ec3-94e6-d16c1a3a9a22
+    createRoute53Record: false
+    endpointType: regional
+    apiType: rest
 
 functions:
   api:
