@@ -17,6 +17,17 @@ app = FastAPI(
     description="Animals event management tool",
     version="1.0.0",
     redoc_url=None,
+    servers=[
+        {
+            "url": "http://localhost:5000",
+            "description": "Local environment",
+        },
+        {
+            "url": "https://bow-api-dev.jozuo.work",
+            "description": "Development environment",
+        },
+        {"url": "https://bow-api.jozuo.work", "description": "Production environment"},
+    ],
 )
 app.add_middleware(
     CORSMiddleware,
