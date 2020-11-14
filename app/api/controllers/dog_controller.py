@@ -22,6 +22,7 @@ class DogRequest(BaseModel):
         None, regex="^[a-z0-9/.]+$", title="画像パス、事前にImageリソースで登録した際に発行されたパス"
     )
     order: Optional[int] = Field(None, title="画面表示順", ge=1)
+    enabled: bool = Field(None, title="有効フラグ")
 
     def to_model(self, owner_id: str) -> DogModel:
         model = DogModel()
@@ -49,7 +50,7 @@ class DogResponse(DogRequest):
         )
 
         for (key, value) in model.attribute_values.items():
-            if key not in vars(response).keys():
+            if key not in vars(response).keys() or value == None:  # noqa: E711
                 continue
             setattr(response, key, value)
         return response
