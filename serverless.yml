@@ -9,6 +9,7 @@ plugins:
   - serverless-dynamodb-local
   - serverless-apigw-binary
   - serverless-domain-manager
+  - serverless-add-api-key
 
 package:
   exclude:
@@ -97,6 +98,8 @@ custom:
     createRoute53Record: false
     endpointType: regional
     apiType: rest
+  apiKeys:
+    - name: bow-api
 
 functions:
   api:
@@ -109,7 +112,7 @@ functions:
       - http:
           path: /{path+}
           method: any
-          private: false
+          private: true
           cors: true
 
 resources:
