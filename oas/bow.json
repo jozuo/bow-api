@@ -69,7 +69,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
       }
     },
     "/owners/search": {
@@ -125,7 +130,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
       }
     },
     "/owners/{owner_id}/dogs/": {
@@ -175,7 +185,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
       },
       "post": {
         "tags": [
@@ -239,7 +254,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
       }
     },
     "/owners/{owner_id}/dogs/{id}": {
@@ -297,7 +317,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
       },
       "put": {
         "tags": [
@@ -373,7 +398,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
       },
       "delete": {
         "tags": [
@@ -429,7 +459,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
       }
     },
     "/owners/{owner_id}/images/": {
@@ -490,7 +525,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
       },
       "post": {
         "tags": [
@@ -554,7 +594,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
       },
       "delete": {
         "tags": [
@@ -610,7 +655,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
       }
     }
   },
@@ -827,6 +877,13 @@
             "type": "string"
           }
         }
+      }
+    },
+    "securitySchemes": {
+      "authorization": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key"
       }
     }
   }
