@@ -652,6 +652,10 @@
             "title": "画面表示順",
             "minimum": 1,
             "type": "integer"
+          },
+          "enabled": {
+            "title": "有効フラグ",
+            "type": "boolean"
           }
         }
       },
@@ -692,6 +696,10 @@
             "title": "画面表示順",
             "minimum": 1,
             "type": "integer"
+          },
+          "enabled": {
+            "title": "有効フラグ",
+            "type": "boolean"
           },
           "id": {
             "title": "犬ID",
