@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-from pynamodb.attributes import UnicodeAttribute
+from pynamodb.attributes import UnicodeAttribute, BooleanAttribute
 from pynamodb.models import Model
 from pynamodb_attributes import IntegerAttribute
 
@@ -24,6 +24,7 @@ class DogModel(Model):
     color = IntegerAttribute(null=True)
     image_path = UnicodeAttribute(null=True)
     order = IntegerAttribute(null=True)
+    enabled = BooleanAttribute(null=False, default=True)
     updated_at = IntegerAttribute(
         null=False, default=int(datetime.timestamp(datetime.now()))
     )
