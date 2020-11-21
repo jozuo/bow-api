@@ -19,11 +19,11 @@ class DogModel(Model):
     owner_id = UnicodeAttribute(hash_key=True, null=False)
     dog_id = UnicodeAttribute(range_key=True, null=False)
     name = UnicodeAttribute(null=False)
+    order = IntegerAttribute(null=False)
     birth = IntegerAttribute(null=True)
     gender = IntegerAttribute(null=True)
     color = IntegerAttribute(null=True)
     image_path = UnicodeAttribute(null=True)
-    order = IntegerAttribute(null=True)
     enabled = BooleanAttribute(null=False, default=True)
     updated_at = IntegerAttribute(
         null=False, default=int(datetime.timestamp(datetime.now()))

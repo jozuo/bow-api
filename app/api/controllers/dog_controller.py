@@ -15,13 +15,13 @@ logger = CustomLogger.getApplicationLogger()
 
 class DogRequest(BaseModel):
     name: str = Field(..., title="名前")
+    order: int = Field(..., title="画面表示順", ge=1)
     birth: Optional[int] = Field(None, title="誕生日(unixtime)", ge=0)
     gender: Optional[int] = Field(None, title="性別", ge=0)
     color: Optional[int] = Field(None, title="毛の色", ge=0)
     image_path: Optional[str] = Field(
         None, regex="^[a-z0-9/.]+$", title="画像パス、事前にImageリソースで登録した際に発行されたパス"
     )
-    order: Optional[int] = Field(None, title="画面表示順", ge=1)
     enabled: bool = Field(None, title="有効フラグ")
 
     def to_model(self, owner_id: str) -> DogModel:
@@ -46,6 +46,7 @@ class DogResponse(DogRequest):
         response = DogResponse(
             id=model.dog_id,
             name=model.name,
+            order=model.order,
             updated_at=model.updated_at,
         )
 
@@ -66,7 +67,15 @@ class DogResponse(DogRequest):
 def list(
     owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID")
 ) -> List[DogResponse]:
-    return [DogResponse.from_model(x) for x in DogModel.query(hash_key=owner_id)]
+    dogs = [x for x in DogModel.query(hash_key=owner_id)]
+    dogs.sort(key=lambda x: x.order)
+    for (idx, dog) in enumerate(dogs):
+        if idx + 1 == dog.order:
+            continue
+        dog.order = idx + 1
+        dog.save()
+
+    return [DogResponse.from_model(x) for x in dogs]
 
 
 @router.get(
