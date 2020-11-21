@@ -8,7 +8,7 @@ from distutils.util import strtobool
 class FormatterJSON(logging.Formatter):
     def format(self, record: logging.LogRecord):
         record.message = record.getMessage()
-        if self.usesTime():
+        if self.usesTime():  # type: ignore
             record.asctime = self.formatTime(record, self.datefmt)
         msg = {
             "name": record.name,

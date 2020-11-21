@@ -88,6 +88,7 @@ custom:
       migrate: false
       seed: false
   domainName:
+    local: bow-api-dev.jozuo.work
     dev: bow-api-dev.jozuo.work
     prod: bow-api.jozuo.work
   customDomain:

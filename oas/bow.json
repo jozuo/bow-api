@@ -684,13 +684,19 @@
       "DogRequest": {
         "title": "DogRequest",
         "required": [
-          "name"
+          "name",
+          "order"
         ],
         "type": "object",
         "properties": {
           "name": {
             "title": "名前",
             "type": "string"
+          },
+          "order": {
+            "title": "画面表示順",
+            "minimum": 1,
+            "type": "integer"
           },
           "birth": {
             "title": "誕生日(unixtime)",
@@ -711,11 +717,6 @@
             "title": "画像パス、事前にImageリソースで登録した際に発行されたパス",
             "pattern": "^[a-z0-9/.]+$",
             "type": "string"
-          },
-          "order": {
-            "title": "画面表示順",
-            "minimum": 1,
-            "type": "integer"
           },
           "enabled": {
             "title": "有効フラグ",
@@ -727,6 +728,7 @@
         "title": "DogResponse",
         "required": [
           "name",
+          "order",
           "id",
           "updated_at"
         ],
@@ -735,6 +737,11 @@
           "name": {
             "title": "名前",
             "type": "string"
+          },
+          "order": {
+            "title": "画面表示順",
+            "minimum": 1,
+            "type": "integer"
           },
           "birth": {
             "title": "誕生日(unixtime)",
@@ -755,11 +762,6 @@
             "title": "画像パス、事前にImageリソースで登録した際に発行されたパス",
             "pattern": "^[a-z0-9/.]+$",
             "type": "string"
-          },
-          "order": {
-            "title": "画面表示順",
-            "minimum": 1,
-            "type": "integer"
           },
           "enabled": {
             "title": "有効フラグ",
