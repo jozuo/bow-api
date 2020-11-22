@@ -197,7 +197,7 @@
           "dogs"
         ],
         "summary": "犬情報の登録",
-        "description": "犬情報を登録します",
+        "description": "オーナーに紐付く犬情報を登録します",
         "operationId": "post_owners__owner_id__dogs__post",
         "parameters": [
           {
@@ -268,7 +268,7 @@
           "dogs"
         ],
         "summary": "犬情報の1件取得",
-        "description": "犬情報を1件取得します",
+        "description": "オーナーに紐付く犬情報を1件取得します",
         "operationId": "get_owners__owner_id__dogs__id__get",
         "parameters": [
           {
@@ -307,6 +307,16 @@
               }
             }
           },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
           "422": {
             "description": "Validation Error",
             "content": {
@@ -329,7 +339,7 @@
           "dogs"
         ],
         "summary": "犬情報の更新",
-        "description": "犬情報を更新します",
+        "description": "オーナーに紐付く犬情報を更新します",
         "operationId": "put_owners__owner_id__dogs__id__put",
         "parameters": [
           {
@@ -410,7 +420,7 @@
           "dogs"
         ],
         "summary": "犬情報の削除",
-        "description": "犬情報を削除します",
+        "description": "オーナーに紐付く犬情報を削除します",
         "operationId": "delete_owners__owner_id__dogs__id__delete",
         "parameters": [
           {
@@ -473,7 +483,7 @@
           "images"
         ],
         "summary": "画像データの取得",
-        "description": "画像データ(バイナリ)を取得します",
+        "description": "オーナーに紐付く画像データ(バイナリ)を取得します",
         "operationId": "get_owners__owner_id__images__get",
         "parameters": [
           {
@@ -537,7 +547,7 @@
           "images"
         ],
         "summary": "画像情報の登録",
-        "description": "画像情報を登録します",
+        "description": "オーナーに紐付く画像情報を登録します",
         "operationId": "post_owners__owner_id__images__post",
         "parameters": [
           {
@@ -606,7 +616,7 @@
           "images"
         ],
         "summary": "画像データの削除",
-        "description": "画像データを削除します",
+        "description": "オーナーに紐付く画像データを削除します",
         "operationId": "delete_owners__owner_id__images__delete",
         "parameters": [
           {
@@ -632,6 +642,348 @@
             },
             "name": "image_path",
             "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmptyResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      }
+    },
+    "/owners/{owner_id}/tasks/": {
+      "get": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "タスク情報の一覧取得",
+        "description": "オーナーに紐付くタスク情報の一覧を取得します",
+        "operationId": "list_owners__owner_id__tasks__get",
+        "parameters": [
+          {
+            "description": "オーナーID",
+            "required": true,
+            "schema": {
+              "title": "Owner Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "オーナーID"
+            },
+            "name": "owner_id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response List Owners  Owner Id  Tasks  Get",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TaskResponse"
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "タスク情報の登録",
+        "description": "オーナーに紐付くタスク情報を登録します",
+        "operationId": "post_owners__owner_id__tasks__post",
+        "parameters": [
+          {
+            "description": "オーナーID",
+            "required": true,
+            "schema": {
+              "title": "Owner Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "オーナーID"
+            },
+            "name": "owner_id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response 400 Post Owners  Owner Id  Tasks  Post",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      }
+    },
+    "/owners/{owner_id}/tasks/{id}": {
+      "get": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "タスク情報の1件取得",
+        "description": "オーナーに紐付くタスク情報を1件取得します",
+        "operationId": "get_owners__owner_id__tasks__id__get",
+        "parameters": [
+          {
+            "description": "オーナーID",
+            "required": true,
+            "schema": {
+              "title": "Owner Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "オーナーID"
+            },
+            "name": "owner_id",
+            "in": "path"
+          },
+          {
+            "description": "タスクID",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "タスクID"
+            },
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response 404 Get Owners  Owner Id  Tasks  Id  Get",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "タスク情報の更新",
+        "description": "オーナーに紐付くタスク情報を更新します",
+        "operationId": "put_owners__owner_id__tasks__id__put",
+        "parameters": [
+          {
+            "description": "オーナーID",
+            "required": true,
+            "schema": {
+              "title": "Owner Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "オーナーID"
+            },
+            "name": "owner_id",
+            "in": "path"
+          },
+          {
+            "description": "タスクID",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "タスクID"
+            },
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response 400 Put Owners  Owner Id  Tasks  Id  Put",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "タスク情報の削除",
+        "description": "オーナーに紐付くタスク情報を削除します",
+        "operationId": "delete_owners__owner_id__tasks__id__delete",
+        "parameters": [
+          {
+            "description": "オーナーID",
+            "required": true,
+            "schema": {
+              "title": "Owner Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "オーナーID"
+            },
+            "name": "owner_id",
+            "in": "path"
+          },
+          {
+            "description": "タスクID",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "タスクID"
+            },
+            "name": "id",
+            "in": "path"
           }
         ],
         "responses": {
@@ -851,6 +1203,72 @@
           "id": {
             "title": "オーナーID",
             "type": "string"
+          }
+        }
+      },
+      "TaskRequest": {
+        "title": "TaskRequest",
+        "required": [
+          "icon_no",
+          "title",
+          "order"
+        ],
+        "type": "object",
+        "properties": {
+          "icon_no": {
+            "title": "アイコンNo",
+            "type": "integer"
+          },
+          "title": {
+            "title": "タイトル",
+            "type": "string"
+          },
+          "order": {
+            "title": "画面表示順",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "enabled": {
+            "title": "有効フラグ",
+            "type": "boolean"
+          }
+        }
+      },
+      "TaskResponse": {
+        "title": "TaskResponse",
+        "required": [
+          "icon_no",
+          "title",
+          "order",
+          "id",
+          "updated_at"
+        ],
+        "type": "object",
+        "properties": {
+          "icon_no": {
+            "title": "アイコンNo",
+            "type": "integer"
+          },
+          "title": {
+            "title": "タイトル",
+            "type": "string"
+          },
+          "order": {
+            "title": "画面表示順",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "enabled": {
+            "title": "有効フラグ",
+            "type": "boolean"
+          },
+          "id": {
+            "title": "タスクID",
+            "type": "string"
+          },
+          "updated_at": {
+            "title": "更新日時(unixtime)",
+            "type": "integer"
           }
         }
       },

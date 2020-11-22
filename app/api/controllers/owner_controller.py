@@ -1,11 +1,10 @@
 import uuid
 
-from fastapi import APIRouter, HTTPException, Query, status
-from pydantic import BaseModel, EmailStr, Field
-
 from app.api.controllers.model import Message
 from app.custom_logging import CustomLogger
 from app.models.owner_model import OwnerModel
+from fastapi import APIRouter, HTTPException, Query, status
+from pydantic import BaseModel, EmailStr, Field
 
 router = APIRouter()
 logger = CustomLogger.getApplicationLogger()

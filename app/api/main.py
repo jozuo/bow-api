@@ -1,13 +1,12 @@
 import time
 from datetime import datetime, timedelta, timezone
 
+from app.api.router import router
+from app.custom_logging import CustomLogger
 from fastapi import FastAPI, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from mangum import Mangum
-
-from app.api.router import router
-from app.custom_logging import CustomLogger
 
 JST = timezone(timedelta(hours=9), "JST")
 logger = CustomLogger.getLogger("application")
