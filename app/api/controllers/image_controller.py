@@ -3,6 +3,8 @@ import uuid
 from datetime import datetime
 
 import boto3
+from app.api.controllers.model import EmptyResponse, Message
+from app.custom_logging import CustomLogger
 from botocore.exceptions import ClientError
 from fastapi import (
     APIRouter,
@@ -15,9 +17,6 @@ from fastapi import (
     status,
 )
 from pydantic import BaseModel, Field
-
-from app.api.controllers.model import EmptyResponse, Message
-from app.custom_logging import CustomLogger
 
 IMAGE_BUCKET = os.environ.get("IMAGE_BUCKET")
 
@@ -41,7 +40,7 @@ class ImageDataResponse(BaseModel):
     response_model_exclude_unset=True,
     responses={status.HTTP_400_BAD_REQUEST: {"model": Message}},
     summary="画像情報の登録",
-    description="画像情報を登録します",
+    description="オーナーに紐付く画像情報を登録します",
 )
 async def post(
     owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID"),
@@ -73,7 +72,7 @@ async def post(
     response_model_exclude_unset=True,
     responses={status.HTTP_404_NOT_FOUND: {"model": Message}},
     summary="画像データの取得",
-    description="画像データ(バイナリ)を取得します",
+    description="オーナーに紐付く画像データ(バイナリ)を取得します",
 )
 def get(
     owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID"),
@@ -105,7 +104,7 @@ def get(
     response_model=EmptyResponse,
     response_model_exclude_unset=True,
     summary="画像データの削除",
-    description="画像データを削除します",
+    description="オーナーに紐付く画像データを削除します",
 )
 def delete(
     owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID"),

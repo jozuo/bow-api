@@ -2,12 +2,11 @@ import uuid
 from datetime import datetime
 from typing import List, Optional
 
-from fastapi import APIRouter, Body, HTTPException, Path, status
-from pydantic import BaseModel, Field
-
 from app.api.controllers.model import EmptyResponse, Message
 from app.custom_logging import CustomLogger
 from app.models.dog_model import DogModel
+from fastapi import APIRouter, Body, HTTPException, Path, status
+from pydantic import BaseModel, Field
 
 router = APIRouter()
 logger = CustomLogger.getApplicationLogger()
@@ -82,15 +81,12 @@ def list(
     "/{id}",
     response_model=DogResponse,
     response_model_exclude_unset=True,
+    responses={status.HTTP_404_NOT_FOUND: {"model": Message}},
     summary="犬情報の1件取得",
-    description="犬情報を1件取得します",
+    description="オーナーに紐付く犬情報を1件取得します",
 )
 def get(
-    owner_id: str = Path(
-        ...,
-        regex="^[a-z0-9]{32}$",
-        description="オーナーID",
-    ),
+    owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID"),
     dog_id: str = Path(..., regex="^[a-z0-9]{32}$", description="犬ID", alias="id"),
 ) -> DogResponse:
 
@@ -110,7 +106,7 @@ def get(
     response_model_exclude_unset=True,
     responses={status.HTTP_400_BAD_REQUEST: {"model": Message}},
     summary="犬情報の登録",
-    description="犬情報を登録します",
+    description="オーナーに紐付く犬情報を登録します",
 )
 def post(
     owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID"),
@@ -134,7 +130,7 @@ def post(
     response_model_exclude_unset=True,
     responses={status.HTTP_404_NOT_FOUND: {"model": Message}},
     summary="犬情報の更新",
-    description="犬情報を更新します",
+    description="オーナーに紐付く犬情報を更新します",
 )
 def put(
     owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID"),
@@ -162,7 +158,7 @@ def put(
     response_model=EmptyResponse,
     response_model_exclude_unset=True,
     summary="犬情報の削除",
-    description="犬情報を削除します",
+    description="オーナーに紐付く犬情報を削除します",
 )
 def delete(
     owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID"),
