@@ -7,5 +7,6 @@
     "python.linting.flake8Args": ["--max-line-length", "88", "--ignore=E501,W503"],
     "editor.codeActionsOnSave": {
         "source.organizeImports": true
-    }
+    },
+    "editor.formatOnSave": true
 }

@@ -2,10 +2,12 @@ import uuid
 from datetime import datetime
 from typing import List, Optional
 
+from app.api.controllers.common import owner_id_parameter
 from app.api.controllers.model import EmptyResponse, Message
 from app.custom_logging import CustomLogger
 from app.models.dog_model import DogModel
 from fastapi import APIRouter, Body, HTTPException, Path, status
+from fastapi.param_functions import Depends
 from pydantic import BaseModel, Field
 
 router = APIRouter()
@@ -56,15 +58,22 @@ class DogResponse(DogRequest):
         return response
 
 
+def dog_id_parameter(
+    dog_id: str = Path(..., regex="^[a-z0-9]{32}$", description="犬ID", alias="id"),
+):
+    return dog_id
+
+
 @router.get(
     "/",
     response_model=List[DogResponse],
     response_model_exclude_unset=True,
+    responses={status.HTTP_404_NOT_FOUND: {"model": Message}},
     summary="犬情報の一覧取得",
     description="オーナーに紐付く犬情報の一覧を取得します",
 )
 def list(
-    owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID")
+    owner_id: str = Depends(owner_id_parameter),
 ) -> List[DogResponse]:
     dogs = [x for x in DogModel.query(hash_key=owner_id)]
     dogs.sort(key=lambda x: x.order)
@@ -86,8 +95,7 @@ def list(
     description="オーナーに紐付く犬情報を1件取得します",
 )
 def get(
-    owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID"),
-    dog_id: str = Path(..., regex="^[a-z0-9]{32}$", description="犬ID", alias="id"),
+    owner_id: str = Depends(owner_id_parameter), dog_id: str = Depends(dog_id_parameter)
 ) -> DogResponse:
 
     try:
@@ -104,12 +112,15 @@ def get(
     status_code=status.HTTP_201_CREATED,
     response_model=DogResponse,
     response_model_exclude_unset=True,
-    responses={status.HTTP_400_BAD_REQUEST: {"model": Message}},
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"model": Message},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
+    },
     summary="犬情報の登録",
     description="オーナーに紐付く犬情報を登録します",
 )
 def post(
-    owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID"),
+    owner_id: str = Depends(owner_id_parameter),
     request: DogRequest = Body(...),
 ) -> DogResponse:
 
@@ -133,8 +144,8 @@ def post(
     description="オーナーに紐付く犬情報を更新します",
 )
 def put(
-    owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID"),
-    dog_id: str = Path(..., regex="^[a-z0-9]{32}$", description="犬ID", alias="id"),
+    owner_id: str = Depends(owner_id_parameter),
+    dog_id: str = Depends(dog_id_parameter),
     request: DogRequest = Body(...),
 ) -> DogResponse:
 
@@ -157,12 +168,13 @@ def put(
     "/{id}",
     response_model=EmptyResponse,
     response_model_exclude_unset=True,
+    responses={status.HTTP_404_NOT_FOUND: {"model": Message}},
     summary="犬情報の削除",
     description="オーナーに紐付く犬情報を削除します",
 )
 def delete(
-    owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID"),
-    dog_id: str = Path(..., regex="^[a-z0-9]{32}$", description="犬ID", alias="id"),
+    owner_id: str = Depends(owner_id_parameter),
+    dog_id: str = Depends(dog_id_parameter),
 ) -> EmptyResponse:
 
     for model in DogModel.query(

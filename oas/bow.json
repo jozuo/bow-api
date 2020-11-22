@@ -175,6 +175,16 @@
               }
             }
           },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
           "422": {
             "description": "Validation Error",
             "content": {
@@ -236,6 +246,16 @@
           },
           "400": {
             "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -459,6 +479,16 @@
               }
             }
           },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
           "422": {
             "description": "Validation Error",
             "content": {
@@ -594,6 +624,16 @@
               }
             }
           },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
           "422": {
             "description": "Validation Error",
             "content": {
@@ -655,6 +695,16 @@
               }
             }
           },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
           "422": {
             "description": "Validation Error",
             "content": {
@@ -710,6 +760,16 @@
               }
             }
           },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
           "422": {
             "description": "Validation Error",
             "content": {
@@ -759,7 +819,7 @@
           "required": true
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "Successful Response",
             "content": {
               "application/json": {
@@ -774,8 +834,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "Response 400 Post Owners  Owner Id  Tasks  Post",
-                  "type": "object"
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
                 }
               }
             }
@@ -848,8 +917,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "Response 404 Get Owners  Owner Id  Tasks  Id  Get",
-                  "type": "object"
+                  "$ref": "#/components/schemas/Message"
                 }
               }
             }
@@ -930,8 +998,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "Response 400 Put Owners  Owner Id  Tasks  Id  Put",
-                  "type": "object"
+                  "$ref": "#/components/schemas/Message"
                 }
               }
             }
@@ -993,6 +1060,407 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/EmptyResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      }
+    },
+    "/owners/{owner_id}/events/": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "summary": "イベント情報の一覧取得",
+        "description": "オーナーに紐付くイベント情報の一覧を取得します",
+        "operationId": "list_owners__owner_id__events__get",
+        "parameters": [
+          {
+            "description": "オーナーID",
+            "required": true,
+            "schema": {
+              "title": "Owner Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "オーナーID"
+            },
+            "name": "owner_id",
+            "in": "path"
+          },
+          {
+            "description": "実施日時:開始(unixtime)",
+            "required": true,
+            "schema": {
+              "title": "From",
+              "type": "integer",
+              "description": "実施日時:開始(unixtime)"
+            },
+            "name": "from",
+            "in": "query"
+          },
+          {
+            "description": "実施日時:終了(unixtime)",
+            "required": true,
+            "schema": {
+              "title": "To",
+              "type": "integer",
+              "description": "実施日時:終了(unixtime)"
+            },
+            "name": "to",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response List Owners  Owner Id  Events  Get",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EventResponse"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "events"
+        ],
+        "summary": "イベント情報の登録",
+        "description": "オーナーに紐付くイベント情報を登録します",
+        "operationId": "post_owners__owner_id__events__post",
+        "parameters": [
+          {
+            "description": "オーナーID",
+            "required": true,
+            "schema": {
+              "title": "Owner Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "オーナーID"
+            },
+            "name": "owner_id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      }
+    },
+    "/owners/{owner_id}/events/{id}": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "summary": "イベント情報の1件取得",
+        "description": "オーナーに紐付くイベント情報を1件取得します",
+        "operationId": "get_owners__owner_id__events__id__get",
+        "parameters": [
+          {
+            "description": "オーナーID",
+            "required": true,
+            "schema": {
+              "title": "Owner Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "オーナーID"
+            },
+            "name": "owner_id",
+            "in": "path"
+          },
+          {
+            "description": "イベントID",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "イベントID"
+            },
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "events"
+        ],
+        "summary": "イベント情報の更新",
+        "description": "オーナーに紐付くイベント情報を更新します",
+        "operationId": "put_owners__owner_id__events__id__put",
+        "parameters": [
+          {
+            "description": "オーナーID",
+            "required": true,
+            "schema": {
+              "title": "Owner Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "オーナーID"
+            },
+            "name": "owner_id",
+            "in": "path"
+          },
+          {
+            "description": "イベントID",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "イベントID"
+            },
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "events"
+        ],
+        "summary": "イベント情報の削除",
+        "description": "オーナーに紐付くイベント情報を削除します",
+        "operationId": "delete_owners__owner_id__events__id__delete",
+        "parameters": [
+          {
+            "description": "オーナーID",
+            "required": true,
+            "schema": {
+              "title": "Owner Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "オーナーID"
+            },
+            "name": "owner_id",
+            "in": "path"
+          },
+          {
+            "description": "イベントID",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "pattern": "^[a-z0-9]{32}$",
+              "type": "string",
+              "description": "イベントID"
+            },
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmptyResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Message"
                 }
               }
             }
@@ -1133,6 +1601,62 @@
         "title": "EmptyResponse",
         "type": "object",
         "properties": {}
+      },
+      "EventRequest": {
+        "title": "EventRequest",
+        "required": [
+          "timestamp",
+          "task_id",
+          "dog_id"
+        ],
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "title": "実施日時(unixtime)",
+            "type": "integer"
+          },
+          "task_id": {
+            "title": "タスクID",
+            "type": "string"
+          },
+          "dog_id": {
+            "title": "犬D",
+            "type": "string"
+          }
+        }
+      },
+      "EventResponse": {
+        "title": "EventResponse",
+        "required": [
+          "timestamp",
+          "task_id",
+          "dog_id",
+          "id",
+          "updated_at"
+        ],
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "title": "実施日時(unixtime)",
+            "type": "integer"
+          },
+          "task_id": {
+            "title": "タスクID",
+            "type": "string"
+          },
+          "dog_id": {
+            "title": "犬D",
+            "type": "string"
+          },
+          "id": {
+            "title": "イベントID",
+            "type": "string"
+          },
+          "updated_at": {
+            "title": "更新日時(unixtime)",
+            "type": "integer"
+          }
+        }
       },
       "HTTPValidationError": {
         "title": "HTTPValidationError",
