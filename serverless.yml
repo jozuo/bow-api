@@ -163,3 +163,29 @@ resources:
             KeyType: HASH
           - AttributeName: task_id
             KeyType: RANGE
+    EventTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        TableName: ${self:service}-${self:provider.stage}-event
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: owner_id
+            AttributeType: S
+          - AttributeName: event_id
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: N
+        KeySchema:
+          - AttributeName: owner_id
+            KeyType: HASH
+          - AttributeName: event_id
+            KeyType: RANGE
+        LocalSecondaryIndexes:
+          - IndexName: event-lsi1
+            KeySchema:
+              - AttributeName: owner_id
+                KeyType: HASH
+              - AttributeName: timestamp
+                KeyType: RANGE
+            Projection:
+                ProjectionType: ALL

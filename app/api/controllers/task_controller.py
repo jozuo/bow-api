@@ -102,6 +102,7 @@ def get(
 
 @router.post(
     "/",
+    status_code=status.HTTP_201_CREATED,
     response_model=TaskResponse,
     response_model_exclude_unset=True,
     responses={status.HTTP_400_BAD_REQUEST: {"model": Message}},

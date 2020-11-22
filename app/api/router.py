@@ -1,5 +1,6 @@
 from app.api.controllers import (
     dog_controller,
+    event_controller,
     image_controller,
     owner_controller,
     task_controller,
@@ -38,5 +39,11 @@ router.include_router(
     task_controller.router,
     prefix="/owners/{owner_id}/tasks",
     tags=["tasks"],
+    dependencies=[api_key_authorization],
+)
+router.include_router(
+    event_controller.router,
+    prefix="/owners/{owner_id}/events",
+    tags=["events"],
     dependencies=[api_key_authorization],
 )
