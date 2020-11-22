@@ -3,19 +3,12 @@ import uuid
 from datetime import datetime
 
 import boto3
+from app.api.controllers.common import owner_id_parameter
 from app.api.controllers.model import EmptyResponse, Message
 from app.custom_logging import CustomLogger
 from botocore.exceptions import ClientError
-from fastapi import (
-    APIRouter,
-    File,
-    HTTPException,
-    Path,
-    Query,
-    Response,
-    UploadFile,
-    status,
-)
+from fastapi import APIRouter, File, HTTPException, Query, Response, UploadFile, status
+from fastapi.param_functions import Depends
 from pydantic import BaseModel, Field
 
 IMAGE_BUCKET = os.environ.get("IMAGE_BUCKET")
@@ -33,17 +26,26 @@ class ImageDataResponse(BaseModel):
     data: bytes = Field(..., title="画像データ")
 
 
+def image_path_parameter(
+    image_path: str = Query(..., regex="^[a-z0-9/.]+$", description="画像パス"),
+):
+    return image_path
+
+
 @router.post(
     "/",
     status_code=status.HTTP_201_CREATED,
     response_model=ImageResponse,
     response_model_exclude_unset=True,
-    responses={status.HTTP_400_BAD_REQUEST: {"model": Message}},
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"model": Message},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
+    },
     summary="画像情報の登録",
     description="オーナーに紐付く画像情報を登録します",
 )
 async def post(
-    owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID"),
+    owner_id: str = Depends(owner_id_parameter),
     file: UploadFile = File(..., description="画像ファイルデータ"),
 ):
 
@@ -75,8 +77,8 @@ async def post(
     description="オーナーに紐付く画像データ(バイナリ)を取得します",
 )
 def get(
-    owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID"),
-    image_path: str = Query(..., regex="^[a-z0-9/.]+$", description="画像パス"),
+    owner_id: str = Depends(owner_id_parameter),
+    image_path: str = Depends(image_path_parameter),
 ):
 
     try:
@@ -103,12 +105,13 @@ def get(
     "/",
     response_model=EmptyResponse,
     response_model_exclude_unset=True,
+    responses={status.HTTP_404_NOT_FOUND: {"model": Message}},
     summary="画像データの削除",
     description="オーナーに紐付く画像データを削除します",
 )
 def delete(
-    owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID"),
-    image_path: str = Query(..., regex="^[a-z0-9/.]+$", description="画像パス"),
+    owner_id: str = Depends(owner_id_parameter),
+    image_path: str = Depends(image_path_parameter),
 ):
     try:
         obj = s3.Object(IMAGE_BUCKET, f"{owner_id}/{image_path}")

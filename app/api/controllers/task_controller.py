@@ -2,14 +2,15 @@ import uuid
 from datetime import datetime
 from typing import List
 
-from app.api.controllers.model import EmptyResponse
+from app.api.controllers.common import owner_id_parameter
+from app.api.controllers.model import EmptyResponse, Message
 from app.custom_logging import CustomLogger
 from app.models.task_model import TaskModel
 from fastapi import APIRouter, status
 from fastapi.exceptions import HTTPException
-from fastapi.param_functions import Body, Path
+from fastapi.param_functions import Body, Depends, Path
 from pydantic import BaseModel, Field
-from starlette.types import Message
+from starlette.status import HTTP_404_NOT_FOUND
 
 router = APIRouter()
 logger = CustomLogger.getApplicationLogger()
@@ -56,15 +57,22 @@ class TaskResponse(TaskRequest):
         return response
 
 
+def task_id_parameter(
+    task_id: str = Path(..., regex="^[a-z0-9]{32}$", description="タスクID", alias="id"),
+):
+    return task_id
+
+
 @router.get(
     "/",
     response_model=List[TaskResponse],
     response_model_exclude_unset=True,
+    responses={status.HTTP_404_NOT_FOUND: {"model": Message}},
     summary="タスク情報の一覧取得",
     description="オーナーに紐付くタスク情報の一覧を取得します",
 )
 def list(
-    owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID")
+    owner_id: str = Depends(owner_id_parameter),
 ) -> List[TaskResponse]:
     tasks = [x for x in TaskModel.query(hash_key=owner_id)]
     tasks.sort(key=lambda x: x.order)
@@ -86,8 +94,8 @@ def list(
     description="オーナーに紐付くタスク情報を1件取得します",
 )
 def get(
-    owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID"),
-    task_id: str = Path(..., regex="^[a-z0-9]{32}$", description="タスクID", alias="id"),
+    owner_id: str = Depends(owner_id_parameter),
+    task_id: str = Depends(task_id_parameter),
 ) -> TaskResponse:
     try:
         return TaskResponse.from_model(
@@ -105,12 +113,15 @@ def get(
     status_code=status.HTTP_201_CREATED,
     response_model=TaskResponse,
     response_model_exclude_unset=True,
-    responses={status.HTTP_400_BAD_REQUEST: {"model": Message}},
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"model": Message},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
+    },
     summary="タスク情報の登録",
     description="オーナーに紐付くタスク情報を登録します",
 )
 def post(
-    owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID"),
+    owner_id: str = Depends(owner_id_parameter),
     request: TaskRequest = Body(...),
 ) -> TaskResponse:
     if is_title_exists(owner_id, request.title):
@@ -133,8 +144,8 @@ def post(
     description="オーナーに紐付くタスク情報を更新します",
 )
 def put(
-    owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID"),
-    task_id: str = Path(..., regex="^[a-z0-9]{32}$", description="タスクID", alias="id"),
+    owner_id: str = Depends(owner_id_parameter),
+    task_id: str = Depends(task_id_parameter),
     request: TaskRequest = Body(...),
 ) -> TaskResponse:
     try:
@@ -155,12 +166,13 @@ def put(
     "/{id}",
     response_model=EmptyResponse,
     response_model_exclude_unset=True,
+    responses={status.HTTP_400_BAD_REQUEST: {"model": Message}},
     summary="タスク情報の削除",
     description="オーナーに紐付くタスク情報を削除します",
 )
 def delete(
-    owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID"),
-    task_id: str = Path(..., regex="^[a-z0-9]{32}$", description="タスクID", alias="id"),
+    owner_id: str = Depends(owner_id_parameter),
+    task_id: str = Depends(task_id_parameter),
 ) -> EmptyResponse:
     for model in TaskModel.query(
         hash_key=owner_id, range_key_condition=TaskModel.task_id == task_id

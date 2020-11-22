@@ -2,12 +2,14 @@ import uuid
 from datetime import datetime
 from typing import List
 
+from app.api.controllers.common import owner_id_parameter
 from app.api.controllers.model import EmptyResponse, Message
 from app.custom_logging import CustomLogger
 from app.models.dog_model import DogModel
 from app.models.event_model import EventModel
 from app.models.task_model import TaskModel
 from fastapi import APIRouter, Body, HTTPException, Path, Query, status
+from fastapi.param_functions import Depends
 from pydantic import BaseModel
 from pydantic.fields import Field
 
@@ -49,15 +51,22 @@ class EventResponse(EventRequest):
         return response
 
 
+def event_id_parameter(
+    event_id: str = Path(..., regex="^[a-z0-9]{32}$", description="イベントID", alias="id"),
+):
+    return event_id
+
+
 @router.get(
     "/",
     response_model=List[EventResponse],
     response_model_exclude_unset=True,
+    responses={status.HTTP_404_NOT_FOUND: {"model": Message}},
     summary="イベント情報の一覧取得",
     description="オーナーに紐付くイベント情報の一覧を取得します",
 )
 def list(
-    owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID"),
+    owner_id: str = Depends(owner_id_parameter),
     from_timestamp: int = Query(..., description="実施日時:開始(unixtime)", alias="from"),
     to_timestamp: int = Query(..., description="実施日時:終了(unixtime)", alias="to"),
 ) -> List[EventResponse]:
@@ -77,8 +86,8 @@ def list(
     description="オーナーに紐付くイベント情報を1件取得します",
 )
 def get(
-    owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID"),
-    event_id: str = Path(..., regex="^[a-z0-9]{32}$", description="イベントID", alias="id"),
+    owner_id: str = Depends(owner_id_parameter),
+    event_id: str = Depends(event_id_parameter),
 ) -> EventResponse:
 
     try:
@@ -97,12 +106,15 @@ def get(
     status_code=status.HTTP_201_CREATED,
     response_model=EventResponse,
     response_model_exclude_unset=True,
-    responses={status.HTTP_400_BAD_REQUEST: {"model": Message}},
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"model": Message},
+        status.HTTP_404_NOT_FOUND: {"model": Message},
+    },
     summary="イベント情報の登録",
     description="オーナーに紐付くイベント情報を登録します",
 )
 def post(
-    owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID"),
+    owner_id: str = Depends(owner_id_parameter),
     request: EventRequest = Body(...),
 ) -> EventResponse:
     validate(owner_id, request)
@@ -120,8 +132,8 @@ def post(
     description="オーナーに紐付くイベント情報を更新します",
 )
 def put(
-    owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID"),
-    event_id: str = Path(..., regex="^[a-z0-9]{32}$", description="イベントID", alias="id"),
+    owner_id: str = Depends(owner_id_parameter),
+    event_id: str = Depends(event_id_parameter),
     request: EventRequest = Body(...),
 ) -> EventResponse:
 
@@ -144,12 +156,13 @@ def put(
     "/{id}",
     response_model=EmptyResponse,
     response_model_exclude_unset=True,
+    responses={status.HTTP_404_NOT_FOUND: {"model": Message}},
     summary="イベント情報の削除",
     description="オーナーに紐付くイベント情報を削除します",
 )
 def delete(
-    owner_id: str = Path(..., regex="^[a-z0-9]{32}$", description="オーナーID"),
-    event_id: str = Path(..., regex="^[a-z0-9]{32}$", description="イベントID", alias="id"),
+    owner_id: str = Depends(owner_id_parameter),
+    event_id: str = Depends(event_id_parameter),
 ) -> EmptyResponse:
 
     for model in EventModel.query(
