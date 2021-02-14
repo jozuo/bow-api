@@ -1,6 +1,8 @@
 ---
 service: bow
 frameworkVersion: '2'
+disabledDeprecations:
+  - LAMBDA_HASHING_VERSION_V2
 
 plugins:
   - serverless-deployment-bucket
@@ -34,7 +36,7 @@ provider:
   stage: ${opt:stage, 'local'}
   region: ${ opt:region, 'ap-northeast-1' }
   deploymentBucket:
-    name: ${self:service}-${self:provider.stage}-sls-deploy
+    name: ${self:custom.resourcePrefix}-sls-deploy
     serverSideEncryption: AES256
   logRetentionInDays: 30
   endpointType: regional
@@ -56,7 +58,7 @@ provider:
           - - arn:aws:dynamodb
             - Ref: AWS::Region
             - Ref: AWS::AccountId
-            - table/${self:service}-${self:provider.stage}-*
+            - table/${self:custom.resourcePrefix}-*
     - Effect: Allow
       Action:
         - s3:ListBucket
@@ -71,6 +73,7 @@ provider:
         - !Sub "${ImageBucket.Arn}/*"
 
 custom:
+  resourcePrefix: ${self:service}-${self:provider.stage}
   prune:
     automatic: true
     number: 3
@@ -87,6 +90,7 @@ custom:
       dbPath: ./.dynamodb-data/
       migrate: false
       seed: false
+    seed: ${file(./tests/data/testdata.yml)}
   domainName:
     local: bow-api-dev.jozuo.work
     dev: bow-api-dev.jozuo.work
@@ -105,10 +109,10 @@ custom:
 functions:
   api:
     handler: app.api.main.handler
-    name: ${self:service}-${self:provider.stage}-api
+    name: ${self:custom.resourcePrefix}-api
     environment:
-      TABLE_PREFIX: ${self:service}-${self:provider.stage}
-      IMAGE_BUCKET: ${self:service}-${self:provider.stage}-image
+      TABLE_PREFIX: ${self:custom.resourcePrefix}
+      IMAGE_BUCKET: ${self:custom.resourcePrefix}-image
     events:
       - http:
           path: /{path+}
@@ -121,11 +125,11 @@ resources:
     ImageBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: ${self:service}-${self:provider.stage}-image
+        BucketName: ${self:custom.resourcePrefix}-image
     OwnerTable:
       Type: "AWS::DynamoDB::Table"
       Properties:
-        TableName: ${self:service}-${self:provider.stage}-owner
+        TableName: ${self:custom.resourcePrefix}-owner
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: id
@@ -136,7 +140,7 @@ resources:
     DogTable:
       Type: "AWS::DynamoDB::Table"
       Properties:
-        TableName: ${self:service}-${self:provider.stage}-dog
+        TableName: ${self:custom.resourcePrefix}-dog
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: owner_id
@@ -151,7 +155,7 @@ resources:
     TaskTable:
       Type: "AWS::DynamoDB::Table"
       Properties:
-        TableName: ${self:service}-${self:provider.stage}-task
+        TableName: ${self:custom.resourcePrefix}-task
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: owner_id
@@ -166,7 +170,7 @@ resources:
     EventTable:
       Type: "AWS::DynamoDB::Table"
       Properties:
-        TableName: ${self:service}-${self:provider.stage}-event
+        TableName: ${self:custom.resourcePrefix}-event
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: owner_id

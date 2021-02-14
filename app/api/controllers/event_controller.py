@@ -2,16 +2,17 @@ import uuid
 from datetime import datetime
 from typing import List
 
+from fastapi import APIRouter, Body, HTTPException, Path, Query, status
+from fastapi.param_functions import Depends
+from pydantic import BaseModel
+from pydantic.fields import Field
+
 from app.api.controllers.common import owner_id_parameter
 from app.api.controllers.model import EmptyResponse, Message
 from app.custom_logging import CustomLogger
 from app.models.dog_model import DogModel
 from app.models.event_model import EventModel
 from app.models.task_model import TaskModel
-from fastapi import APIRouter, Body, HTTPException, Path, Query, status
-from fastapi.param_functions import Depends
-from pydantic import BaseModel
-from pydantic.fields import Field
 
 router = APIRouter()
 logger = CustomLogger.getApplicationLogger()
@@ -70,11 +71,20 @@ def list(
     from_timestamp: int = Query(..., description="実施日時:開始(unixtime)", alias="from"),
     to_timestamp: int = Query(..., description="実施日時:終了(unixtime)", alias="to"),
 ) -> List[EventResponse]:
-    models = EventModel.timestamp_index.query(
-        hash_key=owner_id,
-        range_key_condition=EventModel.timestamp.between(from_timestamp, to_timestamp),
-    )
-    return [EventResponse.from_model(x) for x in models]
+    events = [
+        *EventModel.timestamp_index.query(
+            hash_key=owner_id,
+            range_key_condition=EventModel.timestamp.between(
+                from_timestamp, to_timestamp
+            ),
+        )
+    ]
+    dogs = sorted(DogModel.query(hash_key=owner_id), key=lambda x: x.order)
+    results: List[EventModel] = []
+    for dog in dogs:
+        items = filter(lambda x: x.dog_id == dog.dog_id, events)
+        results.extend(sorted(items, key=lambda x: x.timestamp))
+    return [EventResponse.from_model(x) for x in results]
 
 
 @router.get(

@@ -1425,10 +1425,10 @@ serve-static@1.14.1:
     parseurl "~1.3.3"
     send "0.17.1"
 
-serverless-add-api-key@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/serverless-add-api-key/-/serverless-add-api-key-4.1.1.tgz#b5bf7cf4e7f2cbb026d29fa829cf7b289b3acbfc"
-  integrity sha512-uMH+AztRTOuxuA9fApfiYe8L5hbcuGWiQT9Usx7F+8nfsHj7vmS2dbWNkUwsOQwVzByuwbmqGjZwBqmQazKBnw==
+serverless-add-api-key@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/serverless-add-api-key/-/serverless-add-api-key-4.2.0.tgz#30e71a43af6d2953dc172c85dcc5bb0e09c590fe"
+  integrity sha512-f6M5WdtoV1LDIih9KS+nzKlhdek2g+mtPU5BwPf/NGmffvoehx+WaW4EBpJ/tQnE2+qFgKEk4FgptdrH9W8t+w==
   dependencies:
     aws-sdk "^2.421.0"
     chalk "^2.4.1"
@@ -1438,10 +1438,10 @@ serverless-apigw-binary@^0.4.4:
   resolved "https://registry.yarnpkg.com/serverless-apigw-binary/-/serverless-apigw-binary-0.4.4.tgz#f3cffd8365322a2a1d8bde5fd94b306b7a64d4fb"
   integrity sha512-2DJmQTzeXa/+8u9ekReqf7j4gQjBtzQE4MK9nlOnEz4F7MVWCQXYlLPmf2TXSoxxJZzlWvIiNzCTq6vAT9F5FQ==
 
-serverless-deployment-bucket@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/serverless-deployment-bucket/-/serverless-deployment-bucket-1.2.0.tgz#588d643cbf094b2d7b775b6a31e831d0601cae5a"
-  integrity sha512-boVzzsDvN2B9q0HwHGlyVaSALNWHbXgGqP9o7mCn9FDsgy6JGrNlFBoAkII42Pndw2PIJrpRu7yFB0JEr6akuQ==
+serverless-deployment-bucket@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/serverless-deployment-bucket/-/serverless-deployment-bucket-1.3.0.tgz#714a8234cc692fefd7f1586e7c2105be28399fce"
+  integrity sha512-E8FP+tiAjDntMScxgJvoKCiz8T3EYosiYQZq8AHXnZP96OURqKG8T7iNSnvbJpBCKhqrqK+clQewScuAZ7L4Wg==
   dependencies:
     chalk "^2.4.2"
 
