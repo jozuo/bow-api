@@ -1,6 +1,7 @@
 import os
 
 from fastapi.testclient import TestClient
+from requests.models import Response
 
 from app.api.main import app
 from app.models.owner_model import OwnerModel
@@ -31,13 +32,20 @@ class TestOwnerController:
 
     def setup_method(self, method):
         self.client = TestClient(app)
+        self.headers = {"x-api-key": "hogehoge"}
+
+    def get(self, url: str) -> Response:
+        return self.client.get(url, headers=self.headers)
+
+    def post(self, url: str, json: dict) -> Response:
+        return self.client.post(url, headers=self.headers, json=json)
 
     def test_search_01(self):
         """
         メールアドレスによるオーナー検索
         メールアドレスが存在する場合
         """
-        response = self.client.get(f"/owners/search?email={EXIST_EMAIL}")
+        response = self.get(f"/owners/search?email={EXIST_EMAIL}")
         body = response.json()
         assert response.status_code == 200
         assert body["id"] == "00000000000000000000000000000000"
@@ -48,7 +56,7 @@ class TestOwnerController:
         メールアドレスによるオーナー検索
         メールアドレスが存在しない場合
         """
-        response = self.client.get(f"/owners/search?email={NOT_EXIST_EMAIL}")
+        response = self.get(f"/owners/search?email={NOT_EXIST_EMAIL}")
         body = response.json()
         assert response.status_code == 404
         assert body["detail"] == "owner not found."
@@ -58,7 +66,7 @@ class TestOwnerController:
         メールアドレスによるオーナー検索
         メールアドレスが不正な場合
         """
-        response = self.client.get(f"/owners/search?email={ILLEGAL_EMAIL}")
+        response = self.get(f"/owners/search?email={ILLEGAL_EMAIL}")
         assert response.status_code == 422
         assert_valication_error(
             response, ["query", "email"], "value is not a valid email address"
@@ -70,7 +78,7 @@ class TestOwnerController:
         新規メールアドレスの場合
         """
         body = {"email": "newuser@test.com"}
-        response = self.client.post("/owners/", json=body)
+        response = self.post("/owners/", json=body)
         body = response.json()
         assert response.status_code == 201
         assert "id" in body
@@ -82,7 +90,7 @@ class TestOwnerController:
         既に登録されているメールアドレスの場合
         """
         body = {"email": EXIST_EMAIL}
-        response = self.client.post("/owners/", json=body)
+        response = self.post("/owners/", json=body)
         body = response.json()
         assert response.status_code == 400
         assert body["detail"] == "email is already exists."
@@ -93,7 +101,7 @@ class TestOwnerController:
         メールアドレスが不正な場合
         """
         body = {"email": ILLEGAL_EMAIL}
-        response = self.client.post("/owners/", json=body)
+        response = self.post("/owners/", json=body)
         body = response.json()
         assert response.status_code == 422
         assert_valication_error(

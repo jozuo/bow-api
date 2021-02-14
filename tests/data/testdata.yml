@@ -1,0 +1,16 @@
+owner:
+  sources:
+    - table: ${self:custom.resourcePrefix}-owner
+      sources: [tests/data/owner.json]
+dog:
+  sources:
+    - table: ${self:custom.resourcePrefix}-dog
+      sources: [tests/data/dog.json]
+task:
+  sources:
+    - table: ${self:custom.resourcePrefix}-task
+      sources: [tests/data/task.json]
+event:
+  sources:
+    - table: ${self:custom.resourcePrefix}-event
+      sources: [tests/data/event.json]

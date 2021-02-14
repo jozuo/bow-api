@@ -1,0 +1,35 @@
+[
+  {
+    "color": 2,
+    "gender": 1,
+    "updated_at": 1606001317,
+    "owner_id": "fdc8e0aaac134c6e87b299171f531103",
+    "name": "ルーク",
+    "birth": 19760121,
+    "enabled": true,
+    "dog_id": "433845ff78964f24ad51752a24ccd529",
+    "order": 1
+  },
+  {
+    "color": 2,
+    "gender": 1,
+    "updated_at": 1606002091,
+    "owner_id": "fdc8e0aaac134c6e87b299171f531103",
+    "name": "アーロン",
+    "birth": 19760121,
+    "enabled": true,
+    "dog_id": "eae45780817d4bedbc5dc3d9aa316e81",
+    "order": 3
+  },
+  {
+    "color": 2,
+    "gender": 1,
+    "updated_at": 1606001317,
+    "owner_id": "fdc8e0aaac134c6e87b299171f531103",
+    "name": "チェイス",
+    "birth": 19760121,
+    "enabled": true,
+    "dog_id": "f25105213e8541a7b1c43a30f71cc368",
+    "order": 2
+  }
+]
