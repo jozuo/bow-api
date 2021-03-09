@@ -34,43 +34,45 @@ provider:
   name: aws
   runtime: python3.8
   stage: ${opt:stage, 'local'}
-  region: ${ opt:region, 'ap-northeast-1' }
+  region: ${opt:region, 'ap-northeast-1'}
   deploymentBucket:
     name: ${self:custom.resourcePrefix}-sls-deploy
     serverSideEncryption: AES256
   logRetentionInDays: 30
-  endpointType: regional
+  endpointType: edge
   apiGateway:
     shouldStartNameWithService: true
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:DescribeTable
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      Resource:
-        Fn::Join:
-          - ":"
-          - - arn:aws:dynamodb
-            - Ref: AWS::Region
-            - Ref: AWS::AccountId
-            - table/${self:custom.resourcePrefix}-*
-    - Effect: Allow
-      Action:
-        - s3:ListBucket
-      Resource:
-        - !Sub "${ImageBucket.Arn}"
-    - Effect: Allow
-      Action:
-        - s3:GetObject
-        - s3:PutObject
-        - s3:DeleteObject
-      Resource:
-        - !Sub "${ImageBucket.Arn}/*"
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:DescribeTable
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            Fn::Join:
+              - ":"
+              - - arn:aws:dynamodb
+                - Ref: AWS::Region
+                - Ref: AWS::AccountId
+                - table/${self:custom.resourcePrefix}-*
+        - Effect: Allow
+          Action:
+            - s3:ListBucket
+          Resource:
+            - !Sub "${ImageBucket.Arn}"
+        - Effect: Allow
+          Action:
+            - s3:GetObject
+            - s3:PutObject
+            - s3:DeleteObject
+          Resource:
+            - !Sub "${ImageBucket.Arn}/*"
 
 custom:
   resourcePrefix: ${self:service}-${self:provider.stage}
@@ -101,8 +103,10 @@ custom:
     certificateName: "*.jozuo.work"
     certificateArn: arn:aws:acm:ap-northeast-1:602526353155:certificate/f59fa794-8ee6-4ec3-94e6-d16c1a3a9a22
     createRoute53Record: false
-    endpointType: regional
+    endpointType: edge
+    securityPolicy: tls_1_2
     apiType: rest
+    autoDomain: false
   apiKeys:
     - name: bow-api
 
