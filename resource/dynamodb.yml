@@ -66,4 +66,28 @@ Resources:
               KeyType: RANGE
           Projection:
               ProjectionType: ALL
+  InspectionResultTable:
+    Type: "AWS::DynamoDB::Table"
+    Properties:
+      TableName: ${self:custom.resourcePrefix}-inspection-result
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: key
+          AttributeType: S
+        - AttributeName: timestamp
+          AttributeType: N
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: key
+          KeyType: HASH
+        - AttributeName: timestamp
+          KeyType: RANGe
+      GlobalSecondaryIndexes:
+        - IndexName: inspection-result-gsi1
+          KeySchema:
+            - AttributeName: id
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
 

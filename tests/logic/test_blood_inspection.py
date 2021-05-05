@@ -1,6 +1,6 @@
 import json
-import pytest
-from app.logic.blood_inspection import parse_document, BloodInspectionResult
+
+from app.logic.blood_inspection import BloodInspectionResult, parse_document
 
 
 class TestParseDocument:

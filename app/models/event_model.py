@@ -1,4 +1,3 @@
-import os
 from datetime import datetime
 
 from pynamodb.attributes import UnicodeAttribute
@@ -6,8 +5,7 @@ from pynamodb.indexes import AllProjection, LocalSecondaryIndex
 from pynamodb.models import Model
 from pynamodb_attributes import IntegerAttribute
 
-prefix = os.environ.get("TABLE_PREFIX")
-is_offline = os.environ.get("IS_OFFLINE")
+from app.constants import is_offline, prefix
 
 
 class TimestampIndex(LocalSecondaryIndex):
