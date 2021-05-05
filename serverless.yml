@@ -27,6 +27,7 @@ provider:
   deploymentBucket:
     name: ${self:custom.resourcePrefix}-sls-deploy
     serverSideEncryption: AES256
+  timeout: 30
   lambdaHashingVersion: 20201221
   logRetentionInDays: 30
   endpointType: edge

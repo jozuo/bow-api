@@ -1,6 +1,8 @@
-from dataclasses import dataclass, field, InitVar
-from typing import List, Optional
 import re
+from dataclasses import InitVar, dataclass
+from typing import List, Optional
+
+from app.models.inspection_result import InspectionResult
 
 
 @dataclass
@@ -13,11 +15,8 @@ class Word:
 
 
 @dataclass
-class BloodInspectionResult:
+class BloodInspectionResult(InspectionResult):
     words: InitVar[List[str]]
-    item: str = field(init=False)
-    value: str = field(init=False)
-    unit: str = field(init=False)
 
     def __post_init__(self, items):
         # print(items)
