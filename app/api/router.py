@@ -1,12 +1,14 @@
+from fastapi import APIRouter, Security
+from fastapi.security.api_key import APIKeyHeader
+
 from app.api.controllers import (
     dog_controller,
     event_controller,
     image_controller,
+    inspection_controller,
     owner_controller,
     task_controller,
 )
-from fastapi import APIRouter, Security
-from fastapi.security.api_key import APIKeyHeader
 
 api_key_authorization = Security(
     APIKeyHeader(
@@ -45,5 +47,11 @@ router.include_router(
     event_controller.router,
     prefix="/owners/{owner_id}/events",
     tags=["events"],
+    dependencies=[api_key_authorization],
+)
+router.include_router(
+    inspection_controller.router,
+    prefix="/owners/{owner_id}/inspections",
+    tags=["inspections"],
     dependencies=[api_key_authorization],
 )
