@@ -2,15 +2,15 @@ import uuid
 from datetime import datetime
 from typing import List
 
-from app.api.controllers.common import owner_id_parameter
-from app.api.controllers.model import EmptyResponse, Message
-from app.custom_logging import CustomLogger
-from app.models.task_model import TaskModel
 from fastapi import APIRouter, status
 from fastapi.exceptions import HTTPException
 from fastapi.param_functions import Body, Depends, Path
 from pydantic import BaseModel, Field
-from starlette.status import HTTP_404_NOT_FOUND
+
+from app.api.controllers.common import owner_id_parameter
+from app.api.controllers.model import EmptyResponse, Message
+from app.custom_logging import CustomLogger
+from app.models.task_model import TaskModel
 
 router = APIRouter()
 logger = CustomLogger.getApplicationLogger()

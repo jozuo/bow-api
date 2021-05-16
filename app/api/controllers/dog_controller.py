@@ -2,13 +2,14 @@ import uuid
 from datetime import datetime
 from typing import List, Optional
 
+from fastapi import APIRouter, Body, HTTPException, Path, status
+from fastapi.param_functions import Depends
+from pydantic import BaseModel, Field
+
 from app.api.controllers.common import owner_id_parameter
 from app.api.controllers.model import EmptyResponse, Message
 from app.custom_logging import CustomLogger
 from app.models.dog_model import DogModel
-from fastapi import APIRouter, Body, HTTPException, Path, status
-from fastapi.param_functions import Depends
-from pydantic import BaseModel, Field
 
 router = APIRouter()
 logger = CustomLogger.getApplicationLogger()

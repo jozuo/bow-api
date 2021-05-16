@@ -1,6 +1,7 @@
-from app.models.owner_model import OwnerModel
 from fastapi import Path, status
 from fastapi.exceptions import HTTPException
+
+from app.models.owner_model import OwnerModel
 
 
 def owner_id_parameter(

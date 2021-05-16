@@ -1,3 +1,6 @@
+from fastapi import APIRouter, Security
+from fastapi.security.api_key import APIKeyHeader
+
 from app.api.controllers import (
     dog_controller,
     event_controller,
@@ -5,8 +8,6 @@ from app.api.controllers import (
     owner_controller,
     task_controller,
 )
-from fastapi import APIRouter, Security
-from fastapi.security.api_key import APIKeyHeader
 
 api_key_authorization = Security(
     APIKeyHeader(
