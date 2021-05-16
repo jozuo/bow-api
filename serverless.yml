@@ -114,8 +114,9 @@ functions:
       - http:
           path: /{path+}
           method: any
-          private: true
           cors: true
+          authorizer:
+            type: aws_iam
 
 resources:
   - ${file(./resource/s3.yml)}
