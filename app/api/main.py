@@ -26,6 +26,10 @@ app = FastAPI(
             "url": "https://bow-api-dev.jozuo.work",
             "description": "Development environment",
         },
+        {
+            "url": "https://bow-api-stg.jozuo.work",
+            "description": "Staging environment",
+        },
         {"url": "https://bow-api.jozuo.work", "description": "Production environment"},
     ],
 )
