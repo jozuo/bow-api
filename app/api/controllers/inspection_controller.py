@@ -61,6 +61,7 @@ async def analize_image(
         obj.put(Body=contents)
 
         # 血液検査以外に対応する場合は 条件分岐が必要
-        results.extend(parse_document(ocr(binary=contents)))
+        binary = contents.encode() if isinstance(contents, str) else contents
+        results.extend(parse_document(ocr(binary=binary)))
 
     return [AnalyzeResponse.from_inspection_reusult(x) for x in results]
