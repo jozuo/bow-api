@@ -1,12 +1,13 @@
 import time
 from datetime import datetime, timedelta, timezone
 
-from app.api.router import router
-from app.custom_logging import CustomLogger
 from fastapi import FastAPI, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from mangum import Mangum
+
+from app.api.router import router
+from app.custom_logging import CustomLogger
 
 JST = timezone(timedelta(hours=9), "JST")
 logger = CustomLogger.getLogger("application")
@@ -24,6 +25,10 @@ app = FastAPI(
         {
             "url": "https://bow-api-dev.jozuo.work",
             "description": "Development environment",
+        },
+        {
+            "url": "https://bow-api-stg.jozuo.work",
+            "description": "Staging environment",
         },
         {"url": "https://bow-api.jozuo.work", "description": "Production environment"},
     ],

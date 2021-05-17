@@ -27,3 +27,6 @@ node_modules/
 .dynamodb-data/
 __pycache__/
 test.py
+work/
+.vim/
+.env.*
