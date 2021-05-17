@@ -4,16 +4,10 @@ from app.api.controllers import (
     dog_controller,
     event_controller,
     image_controller,
-    owner_controller,
     task_controller,
 )
 
 router = APIRouter()
-router.include_router(
-    owner_controller.router,
-    prefix="/owners",
-    tags=["owner"],
-)
 router.include_router(
     dog_controller.router,
     prefix="/owners/{owner_id}/dogs",

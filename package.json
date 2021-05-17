@@ -9,7 +9,7 @@
     "start:db": "bash scripts/start-db.sh",
     "start:api": "uvicorn app.api.main:app --host '0.0.0.0' --port '5000' --reload --no-access-log",
     "create:table": "sls dynamodb migrate --stage local",
-    "delete:table": "bash scripts/90.delete-local-all-table.sh",
+    "delete:table": "bash scripts/delete-local-all-table.sh",
     "register:local": "sls dynamodb seed --stage local",
     "create_domain:dev": "sls create_domain --stage=dev",
     "delete_domain:dev": "sls delete_domain --stage=dev",
